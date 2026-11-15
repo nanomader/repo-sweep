@@ -3,6 +3,7 @@ import base64
 import contextlib
 import hashlib
 import io
+import json
 import re
 import shutil
 import subprocess
@@ -226,6 +227,40 @@ class SweepTests(unittest.TestCase):
         self.assertNotEqual(previous, (self.store / "checkpoints.json").read_bytes())
         self.assertIn("-refund = paid + fee", patches[-1])
 
+    def test_failed_first_daily_run_retries_the_original_changes(self):
+        first_base = git(self.repo, "rev-parse", "HEAD")
+        (self.repo / "app.py").write_text("refund = paid - fee\n")
+        current_commit = self.commit()
+        cutoff_commit = first_base
+        actual_git_output = sweep.git_output
+        seen_patches = []
+
+        def git_at_cutoff(repository, *arguments, **options):
+            if "--before=24 hours ago" in arguments:
+                return (cutoff_commit + "\n").encode()
+            return actual_git_output(repository, *arguments, **options)
+
+        async def reviewer(command, workspace, instructions):
+            if (workspace / "candidates.json").exists():
+                return "<main></main>"
+            seen_patches.append((workspace / "changes" / "r1.patch").read_text())
+            if first_attempt and "Check: correctness\n" in instructions:
+                return "malformed note"
+            return "Status: COMPLETE\nCoverage: Reviewed the committed changes."
+
+        with patch.object(sweep, "git_output", git_at_cutoff):
+            first_attempt = True
+            self.assertEqual(self.run_sweep("daily", reviewer)[0], 2)
+            initial_patch = seen_patches[0]
+            self.assertIn("+refund = paid - fee", initial_patch)
+
+            # By the retry, Git's moving 24-hour cutoff would select HEAD and yield an empty diff.
+            first_attempt = False
+            cutoff_commit = current_commit
+            seen_patches.clear()
+            self.assertEqual(self.run_sweep("daily", reviewer)[0], 0)
+            self.assertEqual(set(seen_patches), {initial_patch})
+
     def test_snapshot_ignores_uncommitted_symlink_and_large_content(self):
         large = self.repo / "large.txt"
         large.write_text("EXCLUDED_MARK" * 100)
@@ -315,7 +350,10 @@ class SweepTests(unittest.TestCase):
         self.assertEqual(exit_code, 2)
         self.assertIn("Consolidation failed", path.read_text())
         self.assertIn("Refunds include the fee", path.read_text())
-        self.assertFalse((self.store / "checkpoints.json").exists())
+        inventory = json.loads((path.parent / "inventory.json").read_text())["r1"]
+        checkpoints = json.loads((self.store / "checkpoints.json").read_text())
+        self.assertEqual(checkpoints[inventory["repository"]]["main"], inventory["base"])
+        self.assertNotEqual(inventory["base"], inventory["commit"])
 
 
 if __name__ == "__main__":

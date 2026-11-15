@@ -105,7 +105,9 @@ async def sweep(root, cadence, store, review_command, merge_command=None):
         workspace = Path(directory)
         inventory, problems = snapshot(root, workspace, cadence, checkpoints)
         shutil.copyfile(workspace / "inventory.json", run_dir / "inventory.json")
-        print(f"Reviewing {len(inventory)} Git checkouts. Output: {run_dir}", file=sys.stderr, flush=True)
+        if cadence == "daily":
+            save_checkpoints(checkpoint_file, checkpoints, inventory, review_complete=False)
+        print(f"Git checkouts in scope: {len(inventory)}. Output: {run_dir}", file=sys.stderr, flush=True)
 
         reviews = await run_checks(schedule, review_command, workspace, notes_dir, inventory)
         findings = {}
@@ -129,7 +131,7 @@ async def sweep(root, cadence, store, review_command, merge_command=None):
 
     complete = not problems and all(review.status != "PARTIAL" for review in reviews)
     if cadence == "daily" and complete:
-        save_checkpoints(checkpoint_file, checkpoints, inventory)
+        save_checkpoints(checkpoint_file, checkpoints, inventory, review_complete=True)
     return 0 if complete else 2
 
 
@@ -204,12 +206,13 @@ def describe_schedule(schedule):
     lines = [
         f"{schedule.cadence.title()} review (prompts/{schedule.cadence}.md)",
         schedule.scope,
-        f"Each check uses {schedule.policy.title}.",
+        "Shared instructions for every check",
+        f"  {schedule.policy.title}",
         f"{len(schedule.checks)} {check_label} (up to {MAX_PARALLEL_CHECKS} at a time)",
     ]
     for position, prompt in enumerate(schedule.checks, start=1):
         lines.append(f"  {position}. {prompt.title}")
-    lines.append(f"After all checks, run {schedule.consolidation.title} once.")
+    lines.extend(["Final prompt (once, after all checks)", f"  {schedule.consolidation.title}"])
     return "\n".join(lines)
 
 
@@ -258,11 +261,17 @@ async def consolidate_notes(command, instructions, workspace, notes_dir, finding
     return report.assemble(response, findings)
 
 
-def save_checkpoints(path, checkpoints, inventory):
+def save_checkpoints(path, checkpoints, inventory, *, review_complete):
+    """Freeze a new branch's initial cutoff before reviewers start. Advance to HEAD only after success."""
     for repository in inventory.values():
-        if repository["commit"]:
-            branches = checkpoints.setdefault(repository["repository"], {})
-            branches[repository["branch"]] = repository["commit"]
+        if not repository["commit"]:
+            continue
+        branches = checkpoints.setdefault(repository["repository"], {})
+        branch = repository["branch"]
+        if review_complete:
+            branches[branch] = repository["commit"]
+        else:
+            branches.setdefault(branch, repository["base"])
     temporary = path.with_suffix(".tmp")
     temporary.write_text(json.dumps(checkpoints, indent=2), encoding="utf-8")
     temporary.replace(path)
@@ -344,12 +353,15 @@ def snapshot_repository(repository, name, destination, patch_file, cadence, chec
 
 
 def daily_baseline(repository, branch, head, checkpoints):
+    empty_tree = git_output(repository, "hash-object", "-t", "tree", "--stdin", data=b"").decode().strip()
     previous = checkpoints.get(branch)
+    if previous == empty_tree:
+        return empty_tree, "saved daily baseline; full tree"
     if previous:
         command = ["git", "--no-replace-objects", "-C", str(repository), "merge-base", "--is-ancestor", previous, head]
         ancestry = subprocess.run(command, capture_output=True, env=GIT_ENV, check=False)
         if ancestry.returncode == 0:
-            return previous, "last completed daily run"
+            return previous, "since saved daily baseline"
         reason = "history changed; full tree"
     else:
         recent_base = git_output(repository, "rev-list", "--first-parent", "-1", "--before=24 hours ago", head)
@@ -357,8 +369,7 @@ def daily_baseline(repository, branch, head, checkpoints):
         if recent_base.strip():
             return recent_base.decode().strip(), reason
 
-    empty_tree = git_output(repository, "hash-object", "-t", "tree", "--stdin", data=b"")
-    return empty_tree.decode().strip(), reason
+    return empty_tree, reason
 
 
 def write_daily_patch(repository, base, head, snapshot_dir, patch_file):

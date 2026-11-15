@@ -19,7 +19,7 @@ For weekly, use `./sweep.py /path/to/repositories weekly`. Either command accept
 
 | Schedule | What the checks review |
 | --- | --- |
-| [Daily prompts](prompts/daily.md) | Committed changes since the last complete daily review on each branch. The first run covers the last 24 hours. |
+| [Daily prompts](prompts/daily.md) | Committed changes since the last complete daily review on each branch. The first run covers the last 24 hours. A failed check keeps the same starting commit for the retry. |
 | [Weekly prompts](prompts/weekly.md) | The current commit in every checkout, including unchanged code. |
 
 Both ship with 11 checks covering correctness, reliability, deployment, dependencies, test health, performance, frontend user journeys, security, interfaces, incidents and variants of known bugs. **Edit the linked list under Checks in either schedule to change what that command runs.**
