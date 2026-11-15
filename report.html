@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'sha256-ihG32AB1X/t/moHYtZDl5kIF002arT5wBi0W4osfgA8='; base-uri 'none'; form-action 'none'">
+<title>@@TITLE@@ · Repo Sweep</title>
+<style>
+:root {color-scheme:light dark;--bg:#faf9f6;--ink:#182b32;--muted:#465c63;--line:#c7d2cf;--paper:#fff;--accent:#005e58}
+* {box-sizing:border-box} body {margin:0 auto;padding:2.4rem 1.2rem 4rem;max-width:56rem;background:var(--bg);color:var(--ink);font:1rem/1.5 system-ui,sans-serif}
+h1 {font-size:clamp(2rem,6vw,3rem);line-height:1.08;letter-spacing:-.04em;margin:.2rem 0 .45rem}
+h2 {font-size:1.05rem;line-height:1.35;margin:0;overflow-wrap:anywhere}
+p {margin:.4rem 0} .meta,.where {color:var(--muted);font-size:.9rem}.where {overflow-wrap:anywhere}
+.bar,.row {display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}.bar {margin:1.4rem 0 .6rem}.bar strong {margin-right:auto}
+button {font:inherit;font-weight:600;font-size:.83rem;background:var(--paper);border:1px solid var(--line);color:var(--accent);border-radius:.4rem;padding:.4rem .65rem;cursor:pointer}
+button:disabled {opacity:.5;cursor:default} button:focus-visible,summary:focus-visible,input:focus-visible {outline:3px solid var(--accent);outline-offset:2px}
+article {border-top:1px solid var(--line);padding:1rem 0}.row {flex-wrap:nowrap}.row h2 {flex:1}.row input {width:1.05rem;height:1.05rem;margin:0;accent-color:var(--accent)}.single {flex-shrink:0}
+.severity {padding:.1rem .43rem;border-radius:.3rem;font-size:.76rem;font-weight:700}.critical {background:#711a2e;color:white}.high {background:#ffd9be;color:#682800}.medium {background:#faebad;color:#533b00}
+.summary,.where,article details {margin-left:1.65rem}details {font-size:.9rem;margin-top:.38rem} summary {color:var(--accent);cursor:pointer;width:fit-content}
+pre,textarea {white-space:pre-wrap;overflow-wrap:anywhere;background:var(--paper);border:1px solid var(--line);border-radius:.4rem;padding:.8rem;font: .85rem/1.5 ui-monospace,monospace}
+.coverage {margin-top:1.2rem;border-top:1px solid var(--line);padding-top:.75rem}.coverage li {margin:.3rem 0;overflow-wrap:anywhere}.warn {background:#ffe4a6;color:#452f09;padding:.55rem .75rem;border-radius:.3rem}a {color:var(--accent)}textarea {width:100%;min-height:10rem}
+#feedback {font-size:.87rem;color:var(--muted)}#feedback:empty {display:none}
+@media(max-width:36rem){body{padding:1.3rem .85rem}.row{display:grid;grid-template-columns:auto auto 1fr auto}.row h2{grid-column:2/-1;grid-row:2}.single{grid-column:4;grid-row:1}.bar strong{width:100%}}
+@media(prefers-color-scheme:dark){:root{--bg:#152327;--ink:#ecf4ef;--muted:#afc2c3;--line:#42575c;--paper:#203338;--accent:#94ddc6}}
+</style>
+</head>
+<body>
+<header><h1>@@TITLE@@</h1><p class="meta">@@DESC@@</p></header>
+<main>
+@@WARNING@@
+<div class="bar"><strong>@@COUNT@@ @@Noun@@</strong>
+<button id="selected" type="button" disabled>Copy selected</button><button id="all" type="button" @@Disabled@@>Copy all</button></div>
+<p id="feedback" role="status" aria-live="polite"></p>
+<textarea id="manual" aria-label="Briefs for manual copying" readonly hidden></textarea>
+@@CARDS@@
+</main>
+<footer>@@COVERAGE@@</footer>
+<script>
+const cards = Array.from(document.querySelectorAll('.finding'));
+const selected = document.getElementById('selected');
+const feedback = document.getElementById('feedback');
+const manual = document.getElementById('manual');
+const checked = () => cards.filter(card => card.querySelector('input').checked);
+async function copy(chosen) {
+  const text = chosen.map(card => card.querySelector('.brief').textContent).join('\n\n-----\n\n');
+  if (!text) return;
+  const focus = document.activeElement;
+  manual.hidden = true;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    manual.value = text;
+    manual.hidden = false;
+    manual.focus();
+    manual.select();
+    let succeeded = false;
+    try { succeeded = document.execCommand('copy'); } catch {}
+    if (!succeeded) {
+      feedback.textContent = 'Briefs selected below. Use your keyboard to copy.';
+      return;
+    }
+    manual.hidden = true;
+    focus?.focus();
+  }
+  feedback.textContent = chosen.length === 1 ? 'Copied one brief.' : 'Copied ' + chosen.length + ' briefs.';
+}
+for (const card of cards) {
+  card.querySelector('.single').addEventListener('click', () => copy([card]));
+  card.querySelector('input').addEventListener('change', () => {
+    const count = checked().length;
+    selected.disabled = count === 0;
+    selected.textContent = count ? 'Copy selected (' + count + ')' : 'Copy selected';
+  });
+}
+selected.addEventListener('click', () => copy(checked()));
+document.getElementById('all').addEventListener('click', () => copy(cards));
+</script>
+</body>
+</html>
