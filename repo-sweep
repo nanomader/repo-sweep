@@ -16,16 +16,16 @@ if [[ $schedule != daily && $schedule != weekly ]]; then
 fi
 
 # Find the schedule before switching to the folder being reviewed.
-prompt_folder=$(cd -- "$(dirname -- "$0")/prompts" && pwd)
+prompt_folder=$(cd -- "$(dirname -- "$0")" && pwd)
 schedule_file="$prompt_folder/$schedule.md"
 cd -- "$repository_folder"
 
 case "$agent" in
   cc)
-    exec claude --dangerously-skip-permissions -p "Follow '$schedule_file'."
+    exec claude --dangerously-skip-permissions -p < "$schedule_file"
     ;;
   codex)
-    exec codex --yolo exec --skip-git-repo-check "Follow '$schedule_file'."
+    exec codex --yolo exec --skip-git-repo-check - < "$schedule_file"
     ;;
   *)
     echo "Choose cc or codex." >&2

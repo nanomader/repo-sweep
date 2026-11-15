@@ -1,6 +1,6 @@
 # Third-party notices
 
-Repo Sweep's code and illustration use the MIT license. The prompt catalog links each excerpt to its source revision. [Project license](LICENSE) · [Prompt catalog](prompts.md)
+Repo Sweep's code and illustration use the MIT license. Both prompts adapt excerpts and link to their source revisions. [Project license](LICENSE) · [Daily prompt](daily.md) · [Weekly prompt](weekly.md)
 
 ## MIT
 
