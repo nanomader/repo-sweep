@@ -15,17 +15,18 @@ if [[ $schedule != daily && $schedule != weekly ]]; then
   exit 1
 fi
 
-# Find the schedule before switching to the folder being reviewed.
-prompt_folder=$(dirname -- "$(realpath "$0")")
-schedule_file="$prompt_folder/$schedule.md"
+# Homebrew links this command into bin. The prompts live beside the original launcher.
+launcher=$(realpath "$0")
+prompt_file="$(dirname "$launcher")/$schedule.md"
+
 cd -- "$repository_folder"
 
 case "$agent" in
   cc)
-    exec claude --dangerously-skip-permissions -p < "$schedule_file"
+    exec claude --dangerously-skip-permissions -p < "$prompt_file"
     ;;
   codex)
-    exec codex --yolo exec --skip-git-repo-check - < "$schedule_file"
+    exec codex --yolo exec --skip-git-repo-check - < "$prompt_file"
     ;;
   *)
     echo "Choose cc or codex." >&2
