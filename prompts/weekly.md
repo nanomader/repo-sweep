@@ -1,6 +1,6 @@
 # Weekly review
 
-Each check below runs once across the supplied repository folder, with up to three checks running at a time. Each receives the shared policy. [Policy — evidence and reporting](../prompts.md#policy--evidence-and-reporting)
+Each check below runs once across the supplied repository folder, in parallel when available. Each receives the shared policy. [Policy — evidence and reporting](../prompts.md#policy--evidence-and-reporting)
 
 ## Scope
 

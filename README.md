@@ -13,9 +13,9 @@ Pick either agent for either schedule. Supply one Git checkout or its parent fol
 
 | Schedule | Scope |
 | --- | --- |
-| [Daily prompts](prompts/daily.md) | Committed changes since the last completed shell sweep on each branch. The first run uses the last 24 hours and retains its starting point for retries. |
+| [Daily prompts](prompts/daily.md) | Committed changes since the last completed daily sweep on each branch. The first run uses the last 24 hours and retains its starting point for retries. |
 | [Weekly prompts](prompts/weekly.md) | Current committed source across the checkouts. |
 
-Each listed check runs once and saves a Markdown note, with up to three running at a time. The same agent then verifies and merges the notes into a local HTML report with copy buttons for one, selected or all findings. Open the path printed at the end. Exit status 2 signals incomplete coverage or an incomplete report.
+The script starts the selected agent with permission prompts disabled. The agent runs the checks, saves Markdown notes and prints the path to its local HTML report. Copy a brief for one, selected or all findings.
 
 The [shared catalog](prompts.md) combines reviewed excerpts from seven publishers with our evidence policy and reporting instructions. Optional redacted logs and advisories go under `.repo-sweep-evidence/` in the supplied folder. Hosted agents send the source they read to their provider. [License](LICENSE) · [Source notices](THIRD_PARTY.md)

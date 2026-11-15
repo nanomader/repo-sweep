@@ -1,12 +1,12 @@
 # Daily review
 
-Each check below runs once across the supplied repository folder, with up to three checks running at a time. Each receives the shared policy. [Policy — evidence and reporting](../prompts.md#policy--evidence-and-reporting)
+Each check below runs once across the supplied repository folder, in parallel when available. Each receives the shared policy. [Policy — evidence and reporting](../prompts.md#policy--evidence-and-reporting)
 
-On a day with no committed changes in scope, the runner still launches the listed checks and asks each to record a skip.
+On a day with no committed changes in scope, record a skip for each listed check.
 
 ## Scope
 
-Review committed changes since the last completed daily run on each branch. On the first run, use the last 24 hours. If a check fails, retry from the same starting commit. If history was rewritten and the saved commit is no longer an ancestor, review the current tree. Read the diffs in `repositories/*/changes.patch` and follow callers across repositories. Report regressions introduced or exposed by those changes and still present at the reviewed commit. Unchanged repositories can supply context. If every patch is empty, return SKIPPED.
+Review committed changes since the last completed daily run on each branch. Persist the starting commit for each checkout and branch under `~/.local/state/repo-sweep/`. On the first run, use the commit before the last 24 hours, or the empty tree for a newer repository. Advance the saved commits only after a complete report with no partial coverage. If a check fails, retry from the same starting commit. If history was rewritten and the saved commit is no longer an ancestor, review the current tree. Use Git to compare the starting commit with the recorded HEAD and follow callers across repositories. Report regressions introduced or exposed by those changes and still present at the reviewed commit. Unchanged repositories can supply context. If every patch is empty, return SKIPPED.
 
 ## Checks
 
