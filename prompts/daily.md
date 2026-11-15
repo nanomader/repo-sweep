@@ -6,7 +6,7 @@ On a day with no committed changes in scope, the runner still launches the liste
 
 ## Scope
 
-Review committed changes since the last completed daily run on each branch. On the first run, use the last 24 hours. If a check fails, retry from the same starting commit. If history was rewritten and the saved commit is no longer an ancestor, review the current tree. Read the diffs in `changes/*.patch` and follow callers across repositories. Report regressions introduced or exposed by those changes and still present at the reviewed commit. Unchanged repositories can supply context.
+Review committed changes since the last completed daily run on each branch. On the first run, use the last 24 hours. If a check fails, retry from the same starting commit. If history was rewritten and the saved commit is no longer an ancestor, review the current tree. Read the diffs in `repositories/*/changes.patch` and follow callers across repositories. Report regressions introduced or exposed by those changes and still present at the reviewed commit. Unchanged repositories can supply context. If every patch is empty, return SKIPPED.
 
 ## Checks
 
