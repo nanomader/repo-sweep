@@ -1,6 +1,8 @@
 # Repository review prompts
 
-The two schedules share the checks below. Each reviewer receives the policy, its own check and the requested scope. Quoted instructions are excerpts of the linked upstream files. The remaining text adapts them to local, unattended reviews. The final check merges their notes. [Source licenses](THIRD_PARTY.md)
+The runner reads the list of checks and the review scope from the schedule you choose. Each linked check is defined once below and receives the shared evidence policy. After all checks finish, one consolidation prompt verifies and merges their findings. [Daily schedule](prompts/daily.md) · [Weekly schedule](prompts/weekly.md)
+
+Quoted instructions are excerpts of the linked upstream files. The surrounding text adapts them to local, unattended reviews. [Source licenses](THIRD_PARTY.md)
 
 ## Policy — evidence and reporting
 

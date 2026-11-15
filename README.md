@@ -2,21 +2,32 @@
 
 ![A cheerful desktop computer sends beams of light to a server, a browser and an open book.](assets/banner.jpg)
 
-Review every Git checkout under one folder. Open the local HTML report, skim findings by severity and copy a fix brief for one, selected or all findings. Each brief includes the evidence, exact revisions and lines, a repair direction and a regression check.
+Review the Git checkouts under one folder. The local HTML report lists findings by severity and lets you copy a fix brief for one, selected or all findings.
 
-## Run
+## Run a daily review
 
-On macOS or Linux, use Python 3.9+, Git and a current [Codex CLI](https://github.com/openai/codex) or [Claude Code](https://code.claude.com/docs/en/cli-reference). Sign in to use a hosted model.
+From the Repo Sweep checkout, pass one Git repository or the folder containing your repositories. You need macOS or Linux, Python 3.9+, Git and a current [Codex CLI](https://github.com/openai/codex) or [Claude Code](https://code.claude.com/docs/en/cli-reference).
 
 ```sh
-./sweep.py /path/to/repositories daily
-./sweep.py /path/to/repositories weekly
+./sweep.py /path/to/repositories daily --list  # Preview the checks without calling an AI model
+./sweep.py /path/to/repositories daily         # Run them now
 ```
 
-Daily reviews committed changes since the last complete daily run on each branch (24 hours on the first run). Weekly reviews the current commits, including unchanged repositories. Both run the same checks concurrently, save one Markdown note per check, then run one consolidation prompt. The last output line is the report path. Exit code 2 means coverage was incomplete.
+For weekly, use `./sweep.py /path/to/repositories weekly`. Either command accepts `--list`. Open the report path printed on the last line. Exit code 2 means coverage was incomplete.
 
-Codex is the default. Set `SWEEP_AGENT=claude` for Claude Code. Add `SWEEP_MERGE_AGENT=codex` to have Codex verify and merge Claude's findings. Hosted models receive the source they read and use your plan or API billing. For local inference, start Ollama with a downloaded, tool-capable model and set `SWEEP_AGENT=ollama SWEEP_MODEL=gpt-oss:20b` for both stages.
+## Which prompts run?
 
-[Browse the prompts and pinned sources](prompts.md). The checks use selected review instructions from Cloudflare, Sentry, OpenAI, Anthropic, Trail of Bits, GitHub Next and Supabase, plus our shared evidence policy and a few original prompts. They ship as text in this repository. Runs do not install upstream skills.
+| Schedule | What the checks review |
+| --- | --- |
+| [Daily prompts](prompts/daily.md) | Committed changes since the last complete daily review on each branch. The first run covers the last 24 hours. |
+| [Weekly prompts](prompts/weekly.md) | The current commit in every checkout, including unchanged code. |
 
-Reviews cover committed UTF-8 text files up to 2 MiB each. Optional redacted CI logs, advisories or incident notes go in `.repo-sweep-evidence/` under the supplied folder. Reports and Markdown notes are private local files under `${XDG_STATE_HOME:-~/.local/state}/repo-sweep/`. [Code license](LICENSE) · [Prompt licenses](THIRD_PARTY.md)
+Both ship with 11 checks covering correctness, reliability, deployment, dependencies, test health, performance, frontend user journeys, security, interfaces, incidents and variants of known bugs. **Edit the linked list under Checks in either schedule to change what that command runs.**
+
+Each check runs once across the folder with the shared policy, up to three at a time. Each saves a Markdown note. One final prompt verifies and merges their findings. The catalog combines our instructions with reviewed excerpts from Cloudflare, Sentry, OpenAI, Anthropic, Trail of Bits, GitHub Next and Supabase. [Shared prompts and pinned sources](prompts.md)
+
+## Choose an agent
+
+Sign in to Codex (the default) or set `SWEEP_AGENT=claude` for Claude Code. Add `SWEEP_MERGE_AGENT=codex` to consolidate Claude's notes with Codex. Hosted agents send reviewed source to their provider and use your plan or API billing. For local inference, start Ollama with a downloaded tool-capable model and set `SWEEP_AGENT=ollama SWEEP_MODEL=gpt-oss:20b`.
+
+Reviews cover committed UTF-8 text files up to 2 MiB each. Optional redacted logs or advisories go in `.repo-sweep-evidence/` under the supplied folder. Reports and notes live under `${XDG_STATE_HOME:-~/.local/state}/repo-sweep/`. [Code license](LICENSE) · [Prompt licenses](THIRD_PARTY.md)
