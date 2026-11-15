@@ -1,3 +1,56 @@
+# Third-party notices
+
+Repo Sweep's code and illustration use the MIT license. The prompt catalog links each excerpt to its source revision. [Project license](LICENSE) · [Prompt catalog](prompts.md)
+
+## MIT
+
+The following notices and shared terms apply to excerpts from Cloudflare Security Audit, GitHub Next Agentics and Supabase Agent Skills.
+
+```text
+Copyright (c) 2025-2026 Cloudflare, Inc.
+Copyright (c) 2025 GitHub
+Copyright (c) 2026 Supabase
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## CC BY-SA 4.0
+
+This license covers the Trail of Bits excerpts and adaptations, along with Repo Sweep's original catalog text and arrangement. [License and warranty disclaimer](https://creativecommons.org/licenses/by-sa/4.0/legalcode.en)
+
+## Apache License 2.0
+
+This license covers excerpts from Anthropic Claude Plugins, OpenAI Codex and Sentry Skills. Sentry Skills is copyright 2025 Functional Software, Inc. dba Sentry.
+
+**OpenAI Codex upstream notice**
+
+> OpenAI Codex
+> Copyright 2025 OpenAI
+>
+> This project includes code derived from [Ratatui](https://github.com/ratatui/ratatui), licensed under the MIT license.
+> Copyright (c) 2016-2022 Florian Dehau
+> Copyright (c) 2023-2025 The Ratatui Developers
+
+<details>
+<summary>Full Apache License 2.0</summary>
+
+```text
 
                                  Apache License
                            Version 2.0, January 2004
@@ -200,3 +253,6 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+```
+
+</details>

@@ -19,4 +19,4 @@ Codex is the default. Set `SWEEP_AGENT=claude` for Claude Code. Add `SWEEP_MERGE
 
 [Browse the prompts and pinned sources](prompts.md). The checks use selected review instructions from Cloudflare, Sentry, OpenAI, Anthropic, Trail of Bits, GitHub Next and Supabase, plus our shared evidence policy and a few original prompts. They ship as text in this repository. Runs do not install upstream skills.
 
-Reviews cover committed UTF-8 text files up to 2 MiB each. Optional redacted CI logs, advisories or incident notes go in `.repo-sweep-evidence/` under the supplied folder. Reports and Markdown notes are private local files under `${XDG_STATE_HOME:-~/.local/state}/repo-sweep/`. [Code license](LICENSE) · [Prompt licenses](licenses/README.md)
+Reviews cover committed UTF-8 text files up to 2 MiB each. Optional redacted CI logs, advisories or incident notes go in `.repo-sweep-evidence/` under the supplied folder. Reports and Markdown notes are private local files under `${XDG_STATE_HOME:-~/.local/state}/repo-sweep/`. [Code license](LICENSE) · [Prompt licenses](THIRD_PARTY.md)

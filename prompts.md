@@ -1,6 +1,6 @@
 # Repository review prompts
 
-The two schedules share the checks below. Each reviewer receives the policy, its own check and the requested scope. Quoted instructions are excerpts of the linked upstream files. The remaining text adapts them to local, unattended reviews. The final check merges their notes. [Source licenses](licenses/README.md)
+The two schedules share the checks below. Each reviewer receives the policy, its own check and the requested scope. Quoted instructions are excerpts of the linked upstream files. The remaining text adapts them to local, unattended reviews. The final check merges their notes. [Source licenses](THIRD_PARTY.md)
 
 ## Policy — evidence and reporting
 
