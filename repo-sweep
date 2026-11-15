@@ -16,7 +16,7 @@ if [[ $schedule != daily && $schedule != weekly ]]; then
 fi
 
 # Find the schedule before switching to the folder being reviewed.
-prompt_folder=$(cd -- "$(dirname -- "$0")" && pwd)
+prompt_folder=$(dirname -- "$(realpath "$0")")
 schedule_file="$prompt_folder/$schedule.md"
 cd -- "$repository_folder"
 
