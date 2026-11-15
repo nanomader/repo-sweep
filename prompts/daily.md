@@ -1,6 +1,6 @@
 # Daily review
 
-Each check below runs once across the supplied repository folder, in parallel when available. Each receives the shared policy. [Policy — evidence and reporting](../prompts.md#policy--evidence-and-reporting)
+Review the repositories in the current directory. Follow the [run instructions](../prompts.md#run-the-sweep) and use the scope and checklist below.
 
 On a day with no committed changes in scope, record a skip for each listed check.
 
@@ -24,4 +24,4 @@ Review committed changes since the last completed daily run on each branch. Pers
 
 ## After the checks
 
-Once all Markdown notes are available, run the final prompt once to verify, merge and report findings. [Consolidate — verify findings and write the report](../prompts.md#consolidate--verify-findings-and-write-the-report)
+After every check has finished or been recorded as partial, [generate the local HTML report](../prompts.md#consolidate--verify-findings-and-write-the-report) once and print its absolute path.
