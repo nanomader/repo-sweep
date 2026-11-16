@@ -1,6 +1,6 @@
 # Third-party notices
 
-Repo Sweep's code and illustration use the MIT license. The schedules link to upstream guidance at pinned revisions. Notices below are retained for material adapted in this project. [Project license](LICENSE) · [Daily prompt](daily.md) · [Weekly prompt](weekly.md)
+Repo Sweep's code and illustration use the MIT license. The schedules link to upstream guidance on the publishers’ `main` branches. Notices below are retained for material adapted in this project. [Project license](LICENSE) · [Daily prompt](daily.md) · [Weekly prompt](weekly.md)
 
 ## MIT
 

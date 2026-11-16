@@ -8,11 +8,11 @@ Discover the Git checkouts under the current folder, including the folder itself
 
 Map the active workflows from committed entry points, manifests, callers and configuration. A checkout can contain several kinds of software. Trace contracts across checkouts. Use your own reasoning to find incorrect results, broken user journeys, lost data and incompatible deployments even when no skill covers them.
 
-Select skills for the surfaces you actually find. Fetch each applicable entry point as Markdown. Follow relevant Markdown references only within that upstream repository at the same pinned commit. You may list its files at that revision to locate references. If GitHub is unavailable or required guidance cannot be read, continue the other work and mark that coverage partial.
+Select skills for the surfaces you actually find. On every sweep, before using an upstream skill, query GitHub for its current `refs/heads/main` (for example, use `git ls-remote --exit-code https://github.com/OWNER/REPO.git refs/heads/main`). Record the returned commit in the report’s coverage details. Read the linked Markdown and any relevant Markdown references from that same repository at that commit for the rest of this sweep. If the lookup fails or a required file is unavailable, mark that coverage partial and continue. Never substitute an older cached revision.
 
-- [Cloudflare · Security Audit](https://github.com/cloudflare/security-audit-skill/blob/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8/skills/security-audit/SKILL.md) — Use its focused guidance to trace reachable trust boundaries. Select relevant platform references after inspecting the project.
-- [Supabase · Postgres Best Practices](https://github.com/supabase/agent-skills/blob/c9be0e931b7930f7d02126d04774d904c381e7d7/skills/supabase-postgres-best-practices/SKILL.md) — Use when the workflow touches Postgres, including self-hosted databases. Follow the references relevant to the queries, schema, migrations or access policies you find.
-- [Trail of Bits · Variant Analysis](https://github.com/trailofbits/skills/blob/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/variant-analysis/skills/variant-analysis/SKILL.md) — Use when a confirmed bug gives you a specific root cause to look for elsewhere.
+- [Cloudflare · Security Audit](https://github.com/cloudflare/security-audit-skill/blob/main/skills/security-audit/SKILL.md) — Use its focused guidance to trace reachable trust boundaries. Select relevant platform references after inspecting the project.
+- [Supabase · Postgres Best Practices](https://github.com/supabase/agent-skills/blob/main/skills/supabase-postgres-best-practices/SKILL.md) — Use when the workflow touches Postgres, including self-hosted databases. Follow the references relevant to the queries, schema, migrations or access policies you find.
+- [Trail of Bits · Variant Analysis](https://github.com/trailofbits/skills/blob/main/plugins/variant-analysis/skills/variant-analysis/SKILL.md) — Use when a confirmed bug gives you a specific root cause to look for elsewhere.
 
 ## Investigate and verify
 

@@ -41,6 +41,6 @@ repo-sweep codex ~/code weekly --premium-model
 
 The agent runs with permission prompts disabled. Hosted agents send the source they read to their provider.
 
-Each sweep reads relevant review guidance from pinned GitHub revisions. If a source is unavailable, the report identifies the coverage gap.
+Each sweep checks GitHub for the latest commit on each relevant skill’s `main` branch. The report records which commits it used. If a source is unavailable, the report identifies the coverage gap.
 
 [License](LICENSE) · [Source notices](THIRD_PARTY.md)
