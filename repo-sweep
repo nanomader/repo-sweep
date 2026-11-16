@@ -23,10 +23,10 @@ cd -- "$repository_folder"
 
 case "$agent" in
   cc)
-    exec claude --dangerously-skip-permissions -p < "$prompt_file"
+    exec claude --model claude-fable-5-2 --effort xhigh --dangerously-skip-permissions -p < "$prompt_file"
     ;;
   codex)
-    exec codex --yolo exec --skip-git-repo-check - < "$prompt_file"
+    exec codex --yolo exec --model gpt-6-astra -c 'model_reasoning_effort="xhigh"' --skip-git-repo-check - < "$prompt_file"
     ;;
   *)
     echo "Choose cc or codex." >&2
