@@ -1,6 +1,4 @@
-# Repo Sweep
-
-Find bugs across your repositories and see what’s worth fixing in one evidence-backed report.
+# Find bugs across your repositories and see what's worth fixing.
 
 ![A cheerful desktop computer sends beams of light to a server, browser and book.](assets/banner.jpg)
 
