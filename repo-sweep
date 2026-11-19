@@ -28,8 +28,8 @@ case "$agent" in
     exec claude --model "$model" --effort xhigh --dangerously-skip-permissions -p < "$prompt_file"
     ;;
   codex)
-    model=gpt-6.1-sol
-    if [[ $4 == --premium-model ]]; then model=gpt-6-astra; fi
+    model=gpt-6.2-sol
+    if [[ $4 == --premium-model ]]; then model=gpt-6.2-astra; fi
     exec codex --yolo exec --model "$model" -c 'model_reasoning_effort="xhigh"' --skip-git-repo-check - < "$prompt_file"
     ;;
   *)

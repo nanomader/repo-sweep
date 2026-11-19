@@ -29,7 +29,7 @@ Open the local HTML report at the path printed by the agent. Skim findings by se
 | Agent | Default (lower cost) | With `--premium-model` |
 | --- | --- | --- |
 | Claude Code | Opus 5.5 | Fable 5.2 |
-| Codex | GPT-6.1 Sol | GPT-6 Astra |
+| Codex | GPT-6.2 Sol | GPT-6.2 Astra |
 
 All models use `xhigh` reasoning. To use a premium model, append the flag:
 
